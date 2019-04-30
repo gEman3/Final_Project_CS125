@@ -1,23 +1,25 @@
-package com.example.lib;
+package com.example.final_project_cs125.lib;
+
 import com.google.gson.*;
 
-public class code {
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+
+public final class code {
 
     public String info;
 
 
-    // Must use "search/flavor" API
+    // Must use "search/all" API
     public static boolean checkName(java.lang.String json, String userInputName) {
         if (userInputName == null) {
             return false;
         }
         JsonParser parser = new JsonParser();
-        JsonArray result = parser.parse(json).getAsJsonArray();
-        for (JsonElement strain : result) {
-            String name = strain.getAsJsonObject().get("name").getAsString();
-            if (name.equals(userInputName)) {
-                return true;
-            }
+        JsonObject result = parser.parse(json).getAsJsonObject();
+        if (result.getAsJsonObject(userInputName).getAsString() != null) {
+            return true;
         }
         return false;
     }
