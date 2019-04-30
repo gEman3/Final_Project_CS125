@@ -7,19 +7,19 @@ public class code {
 
 
     // Must use "search/flavor" API
-    public static String checkName(java.lang.String json, String userInputName) {
+    public static boolean checkName(java.lang.String json, String userInputName) {
         if (userInputName == null) {
-            return null;
+            return false;
         }
         JsonParser parser = new JsonParser();
         JsonArray result = parser.parse(json).getAsJsonArray();
         for (JsonElement strain : result) {
             String name = strain.getAsJsonObject().get("name").getAsString();
             if (name.equals(userInputName)) {
-                return strain.getAsJsonObject().get("name").getAsString();
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
 
