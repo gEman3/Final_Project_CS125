@@ -33,19 +33,11 @@ public class MainActivity extends AppCompatActivity {
         nameInput.setErrorEnabled(false);
         nameInput.setError("Cant be blank");
 
-
-
     }
-
-
 
 
     public void saveUserInput() {
         return;
     }
 
-    public boolean isEmpty() {
-        //are 3 boxes empty and 1 box full;
-        return true;
-    }
 }

@@ -2,18 +2,19 @@ package com.example.lib;
 import com.google.gson.*;
 
 public class code {
-    public static java.lang.String getName(java.lang.String json, String name) {
-        if (json == null) {
-            return null;
+    public static int getIDUsingName(java.lang.String json, String userInputName) {
+        if (userInputName == null) {
+            return 0;
         }
         JsonParser parser = new JsonParser();
-        JsonObject result = parser.parse(json).getAsJsonObject();
-        JsonObject metaDataObject = result.get(name).getAsJsonObject();
-        if (metaDataObject.get("format") == null) {
-            return null;
+        JsonArray result = parser.parse(json).getAsJsonArray();
+        for (JsonElement strain : result) {
+            String name = strain.getAsJsonObject().get("name").getAsString();
+            if (name.equals(userInputName)) {
+                return strain.getAsJsonObject().get("id").getAsInt();
+            }
         }
-        String format = metaDataObject.get("format").getAsString();
-        return format;
+        return 0;
     }
     public static java.lang.String getRace(java.lang.String json, String race) {
         return null;
