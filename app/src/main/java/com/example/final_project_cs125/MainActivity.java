@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final TextInputLayout nameInput;
-        nameInput = (TextInputLayout) findViewById(R.id.NAME);
+        nameInput = (TextInputLayout) findViewById(R.id.aSearch);
         String name = nameInput.getEditText().getText().toString();
         nameInput.setErrorEnabled(false);
         nameInput.setError("Cant be blank");
