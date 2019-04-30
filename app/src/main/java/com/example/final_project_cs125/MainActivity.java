@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -18,11 +19,10 @@ import com.example.final_project_cs125.lib.code;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RequestQueue requestQueue;
+    private RequestQueue queue;
 
 
     private static final String TAG = "MP3:Main";
-
 
 
     @Override
@@ -30,13 +30,35 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        requestQueue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue(this);
 
         final Button searchButton = findViewById(R.id.button);
         searchButton.setOnClickListener(v -> {
             Log.d(TAG, "Button is pressed");
-            saveUserInput();
-            displayInfo();
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url ="https://strainapi.evanbusse.com/qazoIsI/strains/search/all";
+
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            saveUserInput();
+                            // Display the first 500 characters of the response string.
+                            displayInfo(response);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    TextView textview = findViewById(R.id.textView3);
+                    textview.setText("That didn't work!");
+                }
+            });
+
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
+            //displayInfo();
         });
     }
 
@@ -52,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayInfo(final String jsonResult) {
-        TextView textView = findViewById(R.id.textView3);
-        if (code.checkName(jsonResult, saveUserInput()) == true) {
+        if (code.checkName(jsonResult, saveUserInput())) {
+            TextView textView = findViewById(R.id.textView3);
             String name = code.getName(jsonResult, saveUserInput());
             String race = code.getRace(jsonResult, saveUserInput());
             String flavor = code.getFlavor(jsonResult, saveUserInput());
@@ -63,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
 
             String all = name + "\n" + race + "\n" + flavor + "\n" + positiveEffect + "\n" + negativeEffect + "\n" + medicalEffect;
             textView.setText(all);
+        } else {
+            TextView textView = findViewById(R.id.textView3);
+            textView.setText("Something went wrong!");
         }
-
     }
+}

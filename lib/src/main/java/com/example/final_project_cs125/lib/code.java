@@ -3,6 +3,7 @@ package com.example.final_project_cs125.lib;
 import com.google.gson.*;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 
@@ -18,10 +19,14 @@ public final class code {
         }
         JsonParser parser = new JsonParser();
         JsonObject result = parser.parse(json).getAsJsonObject();
-        if (result.getAsJsonObject(userInputName).getAsString() != null) {
-            return true;
+        try  {
+            if ((result.getAsJsonObject(userInputName).get("id").getAsInt() > 0)) {
+                return true;
+            }
+            return false;
+        } catch (NullPointerException e) {
+            return false;
         }
-        return false;
     }
 
 
